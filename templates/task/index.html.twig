@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task Index{% endblock %}
+
+{% block body %}
+
+<div class="row">
+{% for task in tasks %}
+    {% if task %}
+        <div class="card">
+
+        </div>
+    {% endif %}
+{% endfor %}
+</div>
+
+{% endblock %}

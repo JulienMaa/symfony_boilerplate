@@ -1,3 +1,50 @@
-body {
-    background-color: skyblue;
+.bg-1 {
+    background-color: #FBFBFB !important;
+}
+
+.bg-2 {
+    background-color: #C890A7 !important;
+}
+
+.bg-3 {
+    background-color: #A35C7A !important;
+}
+
+.bg-4 {
+    background-color: #212121 !important;
+}
+
+.text-1 {
+    color: #FBFBFB !important;
+}
+
+.text-2 {
+    color: #C890A7 !important;
+}
+
+.text-3 {
+    color: #A35C7A !important;
+}
+
+.text-4 {
+    color: #212121 !important;
+}
+
+.font-weight-bold {
+    font-weight: bold !important;
+}
+
+.font-weight-normal {
+    font-weight: normal !important;
+}
+
+#content-wrap {
+    padding-bottom: 2.5rem;    /* Footer height */
+}
+  
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;            /* Footer height */
 }

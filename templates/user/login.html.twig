@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ 'sign_in'|trans }} {% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center text-danger">{{ 'sign_in'|trans }}</h1>
+        <br>
+
+        <div class="bg-transparent rounded p-3 mb-3 rocket-bg-1 text-custom-light-grey mx-auto" style="max-width: 400px;">
+            <div class="card-body rocket-bg-1">
+                <form action="{{ path('app_signin') }}" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">{{ 'email'|trans }}</label>
+                        <input type="text" id="username" name="_username" class="form-control" value="{{ last_username }}" required autofocus>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">{{ 'password'|trans }}</label>
+                        <input type="password" id="password" name="_password" class="form-control" required>
+                    </div>
+
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
+                    <br>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-outline-danger">{{ 'sign_in'|trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
