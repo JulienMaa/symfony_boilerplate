@@ -14,6 +14,18 @@
     background-color: #212121 !important;
 }
 
+.button-stylized {
+    background-color: #C890A7 !important;
+    border-color: #A35C7A !important;
+    color: #FBFBFB !important;
+}
+
+.button-stylized:hover {
+    background-color: #A35C7A !important;
+    border-color: #C890A7 !important;
+    color: #FBFBFB !important;
+}
+
 .text-1 {
     color: #FBFBFB !important;
 }
