@@ -5,9 +5,9 @@ namespace App\Entity;
 use App\Traits\TimestampableTrait;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Task
 {
     use TimestampableTrait;
@@ -26,11 +26,6 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
-
-    public function __construct()
-    {
-        $this->updateTimestamps();
-    }
 
     public function getId(): ?int
     {
@@ -71,5 +66,17 @@ class Task
         $this->author = $author;
 
         return $this;
+    }
+    
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->updateTimestamps();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updateTimestamps();
     }
 }

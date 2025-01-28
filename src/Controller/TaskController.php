@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Repository\TaskRepository;
 use App\Form\TaskType;
 use App\Security\Voter\TaskVoter;
+use App\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,10 +17,12 @@ use Symfony\Bundle\SecurityBundle\Security;
 class TaskController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private TaskService $taskService;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, TaskService $taskService)
     {
         $this->entityManager = $entityManager;
+        $this->taskService = $taskService;
     }
 
     // Afficher la liste des tâches.
@@ -72,26 +75,31 @@ class TaskController extends AbstractController
     
     // Modifier une tâche (Edit a task)
     #[Route('/task/edit/{id}', name: 'task_edit')]
-    public function edit(int $id, TaskRepository $taskRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(int $id, TaskRepository $taskRepository, Request $request): Response
     {
         $task = $taskRepository->find($id);
 
         if (!$this->isGranted(TaskVoter::EDIT, $task)) {
-            $this->addFlash('error', 'You do not have permission to edit this task. Only the owner of the task or admins can edit it.');
+            $this->addFlash('error', 'You do not have permission to edit this task.');
             return $this->redirectToRoute('app_login');
         }
-        
+
         if (!$task) {
             $this->addFlash('error', 'Task not found.');
             return $this->redirectToRoute('task_index');
         }
-        
+
+        if (!$this->taskService->canEdit($task)) {
+            $this->addFlash('error', 'This task cannot be edited because it was created more than 7 days ago.');
+            return $this->redirectToRoute('task_index');
+        }
+
         if ($request->isMethod('POST')) {
             $task->setName($request->request->get('name'))
                 ->setDescription($request->request->get('description'))
                 ->updateTimestamps();
 
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'Task updated successfully!');
             return $this->redirectToRoute('task_index', ['id' => $task->getId()]);
